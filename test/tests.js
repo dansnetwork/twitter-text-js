@@ -110,7 +110,6 @@ test("twttr.txt.autolink", function() {
 
 
   // sproutsocial
-  console.log(twttr.txt.autoLink("@tw", { "data-test" : '!' }));
   ok(twttr.txt.autoLink("@tw", { "data-test" : '!'  }).match(/@<a data-test[^>]+>tw<\/a>/), "Add username HTML attribute");
   ok(twttr.txt.autoLink("http://twitter.com", { "data-test" : '!' }).match(/<a data-test[^>]+>http:\/\/twitter.com<\/a>/), "Add anchor/URL HTML attribute");
 
