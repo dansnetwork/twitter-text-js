@@ -1,3 +1,15 @@
+/*!
+ * twitter-text-js 1.5.2 + SproutSocial changes
+ * cloned: github.com/sproutsocial/twitter-text.js
+ *
+ * Copyright 2012 Twitter, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this work except in compliance with the License.
+ * You may obtain a copy of the License at:
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ */
 if (typeof window === "undefined" || window === null) {
   window = { twttr: {} };
 }
@@ -386,6 +398,9 @@ if (typeof twttr === "undefined" || twttr === null) {
                             'invisibleTagAttrs':true, 'linkAttributeBlock':true, 'linkTextBlock': true, 'htmlEscapeNonEntities': true
                             };
 
+  // sproutsocial
+  OPTIONS_NOT_ATTRIBUTES['originalText']  = true;
+
   var BOOLEAN_ATTRIBUTES = {'disabled':true, 'readonly':true, 'multiple':true, 'checked':true};
 
   // Simple object cloning function for simple objects
@@ -414,6 +429,7 @@ if (typeof twttr === "undefined" || twttr === null) {
   };
 
   twttr.txt.linkToText = function(entity, text, attributes, options) {
+
     if (!options.suppressNoFollow) {
       attributes.rel = "nofollow";
     }
@@ -425,6 +441,13 @@ if (typeof twttr === "undefined" || twttr === null) {
     if (options.linkTextBlock) {
       text = options.linkTextBlock(entity, text);
     }
+
+    // sproutsocial
+    // copy the linked text as original so we are able to use it later
+    if ( options.originalText ) {
+      attributes["data-original"] = text;
+    }
+
     var d = {
       text: text,
       attr: twttr.txt.tagAttrs(attributes)
@@ -1169,7 +1192,7 @@ if (typeof twttr === "undefined" || twttr === null) {
     var urlsWithIndices = twttr.txt.extractUrlsWithIndices(text);
 
     for (var i = 0; i < urlsWithIndices.length; i++) {
-    	// Subtract the length of the original URL
+      // Subtract the length of the original URL
       textLength += urlsWithIndices[i].indices[0] - urlsWithIndices[i].indices[1];
 
       // Add 21 characters for URL starting with https://
