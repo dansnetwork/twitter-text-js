@@ -504,7 +504,11 @@ if (typeof twttr === "undefined" || twttr === null) {
     var isList = entity.listSlug && !options.suppressLists;
     var attrs = clone(options.htmlAttrs || {});
     attrs["class"] = (isList ? options.listClass : options.usernameClass);
-    attrs.href = isList ? options.listUrlBase + user + slashListname : options.usernameUrlBase + user;
+
+    // sproutsocial
+    // attrs.href = isList ? options.listUrlBase + user + slashListname : options.usernameUrlBase + user;
+    attrs.href = isList ? options.listUrlBase + user + slashListname : options.usernameUrlBase + user + "/";
+
     if (!isList && !options.suppressDataScreenName) {
       attrs['data-screen-name'] = user;
     }
