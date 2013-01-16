@@ -58,6 +58,11 @@ test("twttr.txt.extract", function() {
   twttr.txt.modifyIndicesFromUnicodeToUTF16(text, extracted);
   deepEqual(extracted, [{url:"http://twitter.com", indices:[3, 21]}, {url:"http://test.com", indices:[25, 40]}], "URL w/ Supplementary character, UTF-16 indices");
 
+  // handle when the url path ends with @ symbols
+  text = "http://twitter.com/path/more@twitter \uD801\uDC00 http://test.com"
+  extracted = twttr.txt.extractUrlsWithIndices(text);
+  same(extracted, [ { "url": "http://twitter.com/path/more@twitter", "indices": [ 0, 36 ] }, { "url": "http://test.com", "indices": [ 40, 55 ] } ], "URL w/ Supplementary character, @ symbols in valid url path");
+
   var testCases = [
     {text:"abc", indices:[[0,3]], unicode_indices:[[0,3]]},
     {text:"\uD83D\uDE02abc", indices:[[2,5]], unicode_indices:[[1,4]]},
@@ -261,6 +266,12 @@ test("twttr.txt.autolink", function() {
   deepEqual(twttr.txt.autoLink("\uD801\uDC00 #hashtag \uD801\uDC00 @mention \uD801\uDC00 http://twitter.com"),
       "\uD801\uDC00 <a href=\"https://twitter.com/#!/search?q=%23hashtag\" title=\"#hashtag\" class=\"tweet-url hashtag\" rel=\"nofollow\">#hashtag</a> \uD801\uDC00 @<a class=\"tweet-url username\" href=\"https://twitter.com/mention/\" data-screen-name=\"mention\" rel=\"nofollow\">mention</a> \uD801\uDC00 <a href=\"http://twitter.com\" rel=\"nofollow\">http://twitter.com</a>",
       "Autolink hashtag/mentionURL w/ Supplementary character");
+
+  // handle the @ character in the URL
+  var testUrl = "http://twitter.com?var=@val";
+  same(twttr.txt.autoLink(testUrl),  "<a href=\"" + testUrl + "\" rel=\"nofollow\">" + testUrl + "</a>", "Autolink with special char params");
+  // handle the @ character in the URL and an @mention at the same time
+  same(twttr.txt.autoLink(testUrl + " @mention"),  "<a href=\"" + testUrl + "\" rel=\"nofollow\">" + testUrl + "</a> @<a class=\"tweet-url username\" href=\"https://twitter.com/mention\" data-screen-name=\"mention\" rel=\"nofollow\">mention</a>", "Autolink with special char params and mentions");
 });
 
 test("twttr.txt.linkTextWithEntity", function() {
