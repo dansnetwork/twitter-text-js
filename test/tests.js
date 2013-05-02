@@ -59,14 +59,18 @@ test("twttr.txt.extract", function() {
   deepEqual(extracted, [{url:"http://twitter.com", indices:[3, 21]}, {url:"http://test.com", indices:[25, 40]}], "URL w/ Supplementary character, UTF-16 indices");
 
   // handle when the url path ends with @ symbols
-  text = "http://twitter.com/path/more@twitter \uD801\uDC00 http://test.com"
+  text = "http://twitter.com/path/more@twitter \uD801\uDC00 http://test.com";
   extracted = twttr.txt.extractUrlsWithIndices(text);
   deepEqual(extracted, [ { "url": "http://twitter.com/path/more@twitter", "indices": [ 0, 36 ] }, { "url": "http://test.com", "indices": [ 40, 55 ] } ], "URL w/ Supplementary character, @ symbols in valid url path");
 
   // handle when the url has a hyphen and no protocol
-  text = "Some text and a link to www.twitter-rocks.com/path/more-and-some-dashes \uD801\uDC00 http://test.com"
+  text = "Some text and a link to www.twitter-rocks.com/path/more-and-some-dashes \uD801\uDC00 http://test.com";
   extracted = twttr.txt.extractUrlsWithIndices(text);
   deepEqual(extracted, [ { "url": "www.twitter-rocks.com/path/more-and-some-dashes", "indices": [ 24, 71 ] }, { "url": "http://test.com", "indices": [ 75, 90 ] } ], "URL w/ Hyphen in the middle");
+
+  text = "A really long url http://www.twitter-photos.com/store/category.cgi?category=search&query=^events.sql&q2=Martin%20Short%20Hosts%20The%20Hollywood%20Radio%20and%20Television%20Society%20Presents%20%22Comedy%20on%20TV%3A%20A%20Conversation%20with%20Lorne%20Michaels%22";
+  extracted = twttr.txt.extractUrlsWithIndices(text);
+  deepEqual(extracted, [ { "url": "http://www.twitter-photos.com/store/category.cgi?category=search&query=^events.sql&q2=Martin%20Short%20Hosts%20The%20Hollywood%20Radio%20and%20Television%20Society%20Presents%20%22Comedy%20on%20TV%3A%20A%20Conversation%20with%20Lorne%20Michaels%22", "indices": [ 18, 265 ] }], "Really long URL");
 
   var testCases = [
     {text:"abc", indices:[[0,3]], unicode_indices:[[0,3]]},
