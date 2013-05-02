@@ -63,6 +63,11 @@ test("twttr.txt.extract", function() {
   extracted = twttr.txt.extractUrlsWithIndices(text);
   same(extracted, [ { "url": "http://twitter.com/path/more@twitter", "indices": [ 0, 36 ] }, { "url": "http://test.com", "indices": [ 40, 55 ] } ], "URL w/ Supplementary character, @ symbols in valid url path");
 
+  // handle when the url has a hyphen and no protocol
+  text = "Some text and a link to www.twitter-rocks.com/path/more-and-some-dashes \uD801\uDC00 http://test.com"
+  extracted = twttr.txt.extractUrlsWithIndices(text);
+  same(extracted, [ { "url": "www.twitter-rocks.com/path/more-and-some-dashes", "indices": [ 24, 71 ] }, { "url": "http://test.com", "indices": [ 75, 90 ] } ], "URL w/ Hyphen in the middle");
+
   var testCases = [
     {text:"abc", indices:[[0,3]], unicode_indices:[[0,3]]},
     {text:"\uD83D\uDE02abc", indices:[[2,5]], unicode_indices:[[1,4]]},
