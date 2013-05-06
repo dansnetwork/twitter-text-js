@@ -96,7 +96,7 @@ test("twttr.txt.extract", function() {
   ];
 
   for (var i = 0; i < testCases.length; i++) {
-    entities = [];
+    var entities = [];
     for (var j = 0; j < testCases[i].indices.length; j++) {
       entities.push({indices:testCases[i].indices[j]});
     }
@@ -325,7 +325,7 @@ test("twttr.txt.extractMentionsOrListsWithIndices", function() {
   var invalid_chars = ['!', '@', '#', '$', '%', '&', '*'];
 
   for (var i = 0; i < invalid_chars.length; i++) {
-    c = invalid_chars[i];
+    var c = invalid_chars[i];
     equal(twttr.txt.extractMentionsOrListsWithIndices("f" + c + "@kn").length, 0, "Should not extract mention if preceded by " + c);
   }
 });
