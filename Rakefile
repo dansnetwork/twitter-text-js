@@ -58,12 +58,17 @@ namespace :test do
   end
 
   desc "Run conformance test suite"
-  task :conformance => ['conformance:latest', 'conformance:prepare', 'conformance:run'] do
+  task :conformance => ['conformance:update', 'conformance:prepare', 'conformance:run'] do
   end
 
   desc "Run JavaScript test suite"
   task :run do
     exec('open test/test.html')
+  end
+
+  desc "Run NodeJS test suite"
+  task :node do
+    exec('node test/node_tests.js');
   end
 end
 
@@ -100,6 +105,11 @@ task :package, [:version] => [:pkg] do |t, args|
   js_file.close
 
   pkg_file.close
+
+  puts "Minify pkg..."
+  src_file = File.join(File.dirname(__FILE__), "pkg", pkg_name)
+  dst_file = File.join(File.dirname(__FILE__), "pkg", "twitter-text-#{args.version}.min.js")
+  exec('node_modules/uglify-js/bin/uglifyjs ' + src_file + ' -o ' + dst_file);
 
   puts "Done with #{pkg_name}"
 

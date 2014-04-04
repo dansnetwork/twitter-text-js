@@ -1,3 +1,14 @@
+/*!
+ * twitter-text-js 1.6.0
+ *
+ * Copyright 2012 Twitter, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this work except in compliance with the License.
+ * You may obtain a copy of the License at:
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ */
 (function() {
   if (typeof twttr === "undefined" || twttr === null) {
     var twttr = {};
@@ -211,7 +222,7 @@
   twttr.txt.regexen.validHashtag = regexSupplant(/(#{hashtagBoundary})(#{hashSigns})(#{hashtagAlphaNumeric}*#{hashtagAlpha}#{hashtagAlphaNumeric}*)/gi);
 
   // Mention related regex collection
-  twttr.txt.regexen.validMentionPrecedingChars = /(?:^|[^a-zA-Z0-9_!#$%&*@＠]|(?:rt|RT|rT|Rt):?)/;
+  twttr.txt.regexen.validMentionPrecedingChars = /(?:^|[^a-zA-Z0-9_!#$%&*@＠]|RT:?)/;
   twttr.txt.regexen.atSigns = /[@＠]/;
   twttr.txt.regexen.validMentionOrList = regexSupplant(
     '(#{validMentionPrecedingChars})' +  // $1: Preceding character
@@ -224,64 +235,25 @@
 
   // URL related regex collection
   twttr.txt.regexen.validUrlPrecedingChars = regexSupplant(/(?:[^A-Za-z0-9@＠$#＃#{invalid_chars_group}]|^)/);
-  twttr.txt.regexen.invalidUrlWithoutProtocolPrecedingChars = /[\-_.\/]$/;
+  twttr.txt.regexen.invalidUrlWithoutProtocolPrecedingChars = /[-_.\/]$/;
   twttr.txt.regexen.invalidDomainChars = stringSupplant("#{punct}#{spaces_group}#{invalid_chars_group}", twttr.txt.regexen);
   twttr.txt.regexen.validDomainChars = regexSupplant(/[^#{invalidDomainChars}]/);
-  twttr.txt.regexen.validSubdomain = regexSupplant(/(?:(?:#{validDomainChars}(?:[_\-]|#{validDomainChars})*)?#{validDomainChars}\.)/);
-  twttr.txt.regexen.validDomainName = regexSupplant(/(?:(?:#{validDomainChars}(?:\-|#{validDomainChars})*)?#{validDomainChars}\.)/);
-  twttr.txt.regexen.validGTLD = regexSupplant(RegExp(
-    '(?:(?:academy|actor|aero|agency|arpa|asia|bar|bargains|berlin|best|bid|bike|biz|blue|boutique|build|builders|' +
-    'buzz|cab|camera|camp|cards|careers|cat|catering|center|ceo|cheap|christmas|cleaning|clothing|club|codes|' +
-    'coffee|com|community|company|computer|construction|contractors|cool|coop|cruises|dance|dating|democrat|' +
-    'diamonds|directory|domains|edu|education|email|enterprises|equipment|estate|events|expert|exposed|farm|fish|' +
-    'flights|florist|foundation|futbol|gallery|gift|glass|gov|graphics|guitars|guru|holdings|holiday|house|' +
-    'immobilien|industries|info|institute|int|international|jobs|kaufen|kim|kitchen|kiwi|koeln|kred|land|lighting|' +
-    'limo|link|luxury|management|mango|marketing|menu|mil|mobi|moda|monash|museum|nagoya|name|net|neustar|ninja|' +
-    'okinawa|onl|org|partners|parts|photo|photography|photos|pics|pink|plumbing|post|pro|productions|properties|' +
-    'pub|qpon|recipes|red|rentals|repair|report|reviews|rich|ruhr|sexy|shiksha|shoes|singles|social|solar|' +
-    'solutions|supplies|supply|support|systems|tattoo|technology|tel|tienda|tips|today|tokyo|tools|training|' +
-    'travel|uno|vacations|ventures|viajes|villas|vision|vote|voting|voto|voyage|wang|watch|wed|wien|wiki|works|' +
-    'xxx|xyz|zone|дети|онлайн|орг|сайт|بازار|شبكة|みんな|中信|中文网|公司|公益|在线|我爱你|政务|游戏|移动|网络|集团|삼성)' +
-    '(?=[^0-9a-zA-Z@]|$))'));
-  twttr.txt.regexen.validCCTLD = regexSupplant(RegExp(
-    '(?:(?:ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bl|bm|bn|bo|bq|br|bs|' +
-    'bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cu|cv|cw|cx|cy|cz|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|' +
-    'et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|' +
-    'im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|' +
-    'me|mf|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|' +
-    'pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|ss|st|su|sv|' +
-    'sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|' +
-    'ye|yt|za|zm|zw|мон|рф|срб|укр|қаз|الاردن|الجزائر|السعودية|المغرب|امارات|ایران|بھارت|تونس|سودان|سورية|عمان|فلسطين|قطر|مصر|مليسيا|پاکستان|' +
-    'भारत|বাংলা|ভারত|ਭਾਰਤ|ભારત|இந்தியா|இலங்கை|சிங்கப்பூர்|భారత్|ලංකා|ไทย|გე|中国|中國|台湾|台灣|新加坡|' +
-    '香港|한국)(?=[^0-9a-zA-Z@]|$))'));
+  twttr.txt.regexen.validSubdomain = regexSupplant(/(?:(?:#{validDomainChars}(?:[_-]|#{validDomainChars})*)?#{validDomainChars}\.)/);
+  twttr.txt.regexen.validDomainName = regexSupplant(/(?:(?:#{validDomainChars}(?:-|#{validDomainChars})*)?#{validDomainChars}\.)/);
+  twttr.txt.regexen.validGTLD = regexSupplant(/(?:(?:aero|asia|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|xxx)(?=[^0-9a-zA-Z]|$))/);
+  twttr.txt.regexen.validCCTLD = regexSupplant(/(?:(?:ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|ss|st|su|sv|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|za|zm|zw)(?=[^0-9a-zA-Z]|$))/);
   twttr.txt.regexen.validPunycode = regexSupplant(/(?:xn--[0-9a-z]+)/);
   twttr.txt.regexen.validDomain = regexSupplant(/(?:#{validSubdomain}*#{validDomainName}(?:#{validGTLD}|#{validCCTLD}|#{validPunycode}))/);
-  twttr.txt.regexen.validAsciiDomain = regexSupplant(/(?:(?:[\-a-z0-9_\-#{latinAccentChars}]+)\.)+(?:#{validGTLD}|#{validCCTLD}|#{validPunycode})/gi);
-  twttr.txt.regexen.invalidShortDomain = regexSupplant(/^#{validDomainName}#{validCCTLD}$/i);
+  twttr.txt.regexen.validAsciiDomain = regexSupplant(/(?:(?:[\-a-z0-9#{latinAccentChars}]+)\.)+(?:#{validGTLD}|#{validCCTLD}|#{validPunycode})/gi);
+  twttr.txt.regexen.invalidShortDomain = regexSupplant(/^#{validDomainName}#{validCCTLD}$/);
 
   twttr.txt.regexen.validPortNumber = regexSupplant(/[0-9]+/);
 
   twttr.txt.regexen.validGeneralUrlPathChars = regexSupplant(/[a-z0-9!\*';:=\+,\.\$\/%#\[\]\-_~@|&#{latinAccentChars}]/i);
-  // Allow URL paths to contain up to two nested levels of balanced parens
+  // Allow URL paths to contain balanced parens
   //  1. Used in Wikipedia URLs like /Primer_(film)
   //  2. Used in IIS sessions like /S(dfd346)/
-  //  3. Used in Rdio URLs like /track/We_Up_(Album_Version_(Edited))/
-  twttr.txt.regexen.validUrlBalancedParens = regexSupplant(
-    '\\('                                   +
-      '(?:'                                 +
-        '#{validGeneralUrlPathChars}+'      +
-        '|'                                 +
-        // allow one nested level of balanced parentheses
-        '(?:'                               +
-          '#{validGeneralUrlPathChars}*'    +
-          '\\('                             +
-            '#{validGeneralUrlPathChars}+'  +
-          '\\)'                             +
-          '#{validGeneralUrlPathChars}*'    +
-        ')'                                 +
-      ')'                                   +
-    '\\)'
-  , 'i');
+  twttr.txt.regexen.validUrlBalancedParens = regexSupplant(/\(#{validGeneralUrlPathChars}+\)/i);
   // Valid end-of-path chracters (so /foo. does not gobble the period).
   // 1. Allow =&# for empty URL parameters and other URL-join artifacts
   twttr.txt.regexen.validUrlPathEndingChars = regexSupplant(/[\+\-a-z0-9=_#\/#{latinAccentChars}]|(?:#{validUrlBalancedParens})/i);
@@ -294,7 +266,7 @@
       ')|(?:@#{validGeneralUrlPathChars}+\/)'+
     ')', 'i');
 
-  twttr.txt.regexen.validUrlQueryChars = /[a-z0-9!?\^\*'@\(\);:&=\+\$\/%#\[\]\-_\.,~|]/i;
+  twttr.txt.regexen.validUrlQueryChars = /[a-z0-9!?\*'@\(\);:&=\+\$\/%#\[\]\-_\.,~|]/i;
   twttr.txt.regexen.validUrlQueryEndingChars = /[a-z0-9_&=#\/]/i;
   twttr.txt.regexen.extractUrl = regexSupplant(
     '('                                                            + // $1 total match
@@ -422,9 +394,6 @@
                             'invisibleTagAttrs':true, 'linkAttributeBlock':true, 'linkTextBlock': true, 'htmlEscapeNonEntities': true
                             };
 
-  // sproutsocial
-  OPTIONS_NOT_ATTRIBUTES['originalText']  = true;
-
   var BOOLEAN_ATTRIBUTES = {'disabled':true, 'readonly':true, 'multiple':true, 'checked':true};
 
   // Simple object cloning function for simple objects
@@ -453,7 +422,6 @@
   };
 
   twttr.txt.linkToText = function(entity, text, attributes, options) {
-
     if (!options.suppressNoFollow) {
       attributes.rel = "nofollow";
     }
@@ -465,13 +433,6 @@
     if (options.linkTextBlock) {
       text = options.linkTextBlock(entity, text);
     }
-
-    // sproutsocial
-    // copy the linked text as original so we are able to use it later
-    if ( options.originalText ) {
-      attributes["data-original"] = text;
-    }
-
     var d = {
       text: text,
       attr: twttr.txt.tagAttrs(attributes)
@@ -498,7 +459,7 @@
     attrs.href = options.hashtagUrlBase + hashtag;
     attrs.title = "#" + hashtag;
     attrs["class"] = options.hashtagClass;
-    if (hashtag.charAt(0).match(twttr.txt.regexen.rtl_chars)){
+    if (hashtag[0].match(twttr.txt.regexen.rtl_chars)){
       attrs["class"] += " rtl";
     }
     if (options.targetBlank) {
@@ -528,11 +489,7 @@
     var isList = entity.listSlug && !options.suppressLists;
     var attrs = clone(options.htmlAttrs || {});
     attrs["class"] = (isList ? options.listClass : options.usernameClass);
-
-    // sproutsocial
-    // attrs.href = isList ? options.listUrlBase + user + slashListname : options.usernameUrlBase + user;
-    attrs.href = isList ? options.listUrlBase + user + slashListname : options.usernameUrlBase + user + "/";
-
+    attrs.href = isList ? options.listUrlBase + user + slashListname : options.usernameUrlBase + user;
     if (!isList && !options.suppressDataScreenName) {
       attrs['data-screen-name'] = user;
     }
@@ -707,34 +664,22 @@
   };
 
   twttr.txt.autoLinkWithJSON = function(text, json, options) {
-    // map JSON entity to twitter-text entity
-    if (json.user_mentions) {
-      for (var i = 0; i < json.user_mentions.length; i++) {
-        // this is a @mention
-        json.user_mentions[i].screenName = json.user_mentions[i].screen_name;
-      }
-    }
-    
-    if (json.hashtags) {
-      for (var i = 0; i < json.hashtags.length; i++) {
-        // this is a #hashtag
-        json.hashtags[i].hashtag = json.hashtags[i].text;
-      }
-    }
-    
-    if (json.symbols) {
-      for (var i = 0; i < json.symbols.length; i++) {
-        // this is a $CASH tag
-        json.symbols[i].cashtag = json.symbols[i].text;
-      }
-    }
-    
     // concatenate all entities
     var entities = [];
     for (var key in json) {
       entities = entities.concat(json[key]);
     }
-
+    // map JSON entity to twitter-text entity
+    for (var i = 0; i < entities.length; i++) {
+      entity = entities[i];
+      if (entity.screen_name) {
+        // this is @mention
+        entity.screenName = entity.screen_name;
+      } else if (entity.text) {
+        // this is #hashtag
+        entity.hashtag = entity.text;
+      }
+    }
     // modify indices to UTF-16
     twttr.txt.modifyIndicesFromUnicodeToUTF16(text, entities);
 
@@ -1244,7 +1189,7 @@
     twttr.txt.modifyIndicesFromUTF16ToUnicode(text, urlsWithIndices);
 
     for (var i = 0; i < urlsWithIndices.length; i++) {
-      // Subtract the length of the original URL
+    	// Subtract the length of the original URL
       textLength += urlsWithIndices[i].indices[0] - urlsWithIndices[i].indices[1];
 
       // Add 23 characters for URL starting with https://
