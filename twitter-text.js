@@ -528,9 +528,11 @@
     if (hashtag.charAt(0).match(twttr.txt.regexen.rtl_chars)){
       attrs["class"] += " rtl";
     }
-    if (options.targetBlank) {
+
+    // sproutsocial commenting out because we want hashtag links to open in same window
+    /*if (options.targetBlank) {
       attrs.target = '_blank';
-    }
+    }*/
 
     return twttr.txt.linkToTextWithSymbol(entity, hash, hashtag, attrs, options);
   };
@@ -541,9 +543,11 @@
     attrs.href = options.cashtagUrlBase + cashtag;
     attrs.title = "$" + cashtag;
     attrs["class"] =  options.cashtagClass;
-    if (options.targetBlank) {
+
+    // sproutsocial commenting out because we want cashtag links to open in same window
+    /*if (options.targetBlank) {
       attrs.target = '_blank';
-    }
+    }*/
 
     return twttr.txt.linkToTextWithSymbol(entity, "$", cashtag, attrs, options);
   };
