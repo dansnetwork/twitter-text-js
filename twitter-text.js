@@ -451,6 +451,7 @@
 
   // sproutsocial
   OPTIONS_NOT_ATTRIBUTES['originalText']  = true;
+  OPTIONS_NOT_ATTRIBUTES['suppressNoReferrer']  = true;
 
   var BOOLEAN_ATTRIBUTES = {'disabled':true, 'readonly':true, 'multiple':true, 'checked':true};
 
@@ -484,6 +485,12 @@
     if (!options.suppressNoFollow) {
       attributes.rel = "nofollow";
     }
+
+    // sproutsocial
+    if (!options.suppressNoReferrer) {
+      attributes.rel = attributes.rel ? (attributes.rel + " noreferrer") : "noreferrer";
+    }
+
     // if linkAttributeBlock is specified, call it to modify the attributes
     if (options.linkAttributeBlock) {
       options.linkAttributeBlock(entity, attributes);
